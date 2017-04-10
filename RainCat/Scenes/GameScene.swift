@@ -12,9 +12,12 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
     
     private var lastUpdateTime : TimeInterval = 0
     private var currentRainDropSpawnTime : TimeInterval = 0
-    private var rainDropSpawnRate : TimeInterval = 0.5
+    private var rainDropSpawnRate : TimeInterval = 1
     private let backgroundNode = BackgroundNode()
+    //雨滴
     let raindropTexture = SKTexture(imageNamed: "rain_drop")
+    //雨伞
+    private let umbrellaNode = UmbrellaSprite.newInstance()
     
     override func sceneDidLoad() {
         self.lastUpdateTime = 0
@@ -33,6 +36,10 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
         self.physicsBody?.categoryBitMask = WorldCategory
         
         self.physicsWorld.contactDelegate = self
+        
+        umbrellaNode.position = CGPoint(x: frame.midX, y: frame.midY)
+        umbrellaNode.zPosition = 4
+        addChild(umbrellaNode)
         
     }
     
@@ -77,16 +84,21 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
         let yPosition = size.height+raindrop.size.height
         
         raindrop.physicsBody = SKPhysicsBody(texture: raindropTexture, size: raindrop.size)
-        //设置雨滴人物理标记
+        //设置雨滴物理标记
         raindrop.physicsBody?.categoryBitMask = RainDropCategory
         raindrop.physicsBody?.contactTestBitMask = FloorCategory|WorldCategory
         raindrop.position = CGPoint(x: xPosition, y: yPosition)
+        
+        raindrop.zPosition = 2
+        raindrop.alpha = 0.3
         
         addChild(raindrop)
     }
     
     //碰撞事件
     func didBegin(_ contact: SKPhysicsContact) {
+        DLLog(message: "出发了碰撞方法：")
+        
         if contact.bodyA.categoryBitMask == RainDropCategory {
             contact.bodyA.node?.physicsBody?.collisionBitMask = 0
             contact.bodyA.node?.physicsBody?.categoryBitMask = 0
