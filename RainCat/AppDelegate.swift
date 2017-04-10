@@ -16,6 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
   func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
     // Override point for customization after application launch.
+    DLLog(message: "app start")
     return true
   }
 
@@ -40,4 +41,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   func applicationWillTerminate(_ application: UIApplication) {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
   }
+}
+
+
+func DLLog<T>(message: T, fileName: String = #file, funcName: String = #function, lineNum : Int = #line) {
+    
+    #if DEBUG
+        /**
+         * 此处还要在项目的build settings中搜索swift flags,找到 Other Swift Flags 找到Debug
+         * 添加 -D DEBUG,即可。
+         */
+        // 1.对文件进行处理
+        let file = (fileName as NSString).lastPathComponent
+        // 2.打印内容
+        print("[\(file)][\(funcName)](\(lineNum))\(message)")
+        
+    #endif
+    
 }
