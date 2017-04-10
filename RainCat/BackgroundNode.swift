@@ -20,5 +20,8 @@ public class BackgroundNode:SKNode{
         physicsBody = SKPhysicsBody(edgeFrom: startPoint, to: endPoint)
         //restitution属性改变了地面物理弹性
         physicsBody?.restitution = 0.3
+        //做物理标记
+        physicsBody?.categoryBitMask  = FloorCategory
+        physicsBody?.contactTestBitMask = RainDropCategory
     }
 }
