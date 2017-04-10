@@ -33,7 +33,7 @@ playground.xcworkspace
 
 # CocoaPods
 Pods/
-/*.xcworkspace
+#/*.xcworkspace
 
 # Carthage
 Carthage/Build
