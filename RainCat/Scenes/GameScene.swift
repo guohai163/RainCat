@@ -56,7 +56,7 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
         addChild(umbrellaNode)
         
         spawnCat()
-        
+        spawnFood()
     }
     
     //屏幕按下事件
@@ -186,5 +186,43 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
             DLLog(message: "其他物体碰到了猫\(otherBody.categoryBitMask)")
         }
         
+    }
+    
+    //食盆触碰事件
+    func handleFoodHit(contact: SKPhysicsContact) {
+        var otherBody : SKPhysicsBody
+        var foodBody : SKPhysicsBody
+        
+        if contact.bodyA.categoryBitMask == FoodCategory {
+            otherBody = contact.bodyB
+            foodBody = contact.bodyA
+        } else {
+            otherBody = contact.bodyA
+            foodBody = contact.bodyB
+        }
+        
+        switch otherBody.categoryBitMask {
+        case CatCategory:
+            DLLog(message: "fed cat")
+            fallthrough
+        case WorldCategory:
+            foodBody.node?.removeFromParent()
+            foodBody.node?.physicsBody = nil
+            
+            spawnFood()
+        default:
+            DLLog(message: "something else touched the food")
+        }
+    }
+    
+    func spawnFood() {
+        let food = FoodSprite.newInstance()
+        var randomPosition : CGFloat = CGFloat(arc4random())
+        
+        randomPosition =  randomPosition.truncatingRemainder(dividingBy: size.width - 🍜EdgeMargin*2)
+        randomPosition += 🍜EdgeMargin
+        
+        food.position = CGPoint(x: randomPosition, y: size.height)
+        addChild(food)
     }
 }
