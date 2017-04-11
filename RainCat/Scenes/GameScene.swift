@@ -141,6 +141,17 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
 //            contact.bodyB.node?.physicsBody?.categoryBitMask = 0
         }
         
+        //猫和食物触碰后
+        //        DLLog(message: "bodyA:\(contact.bodyA.categoryBitMask).bodyB:\(contact.bodyB.categoryBitMask)")
+        if (contact.bodyA.categoryBitMask == CatCategory && contact.bodyB.categoryBitMask == FoodCategory)
+            || (contact.bodyA.categoryBitMask == FoodCategory && contact.bodyB.categoryBitMask == CatCategory)
+        {
+            DLLog(message: "食物 触碰到猫")
+            foodNode.removeAllActions()
+            foodNode.removeFromParent()
+            foodNode.physicsBody = nil
+            spawnFood()
+        }
         //如果触碰体是猫
         if contact.bodyA.categoryBitMask == CatCategory || contact.bodyB.categoryBitMask == CatCategory {
             handleCatCollision(contact: contact)
@@ -153,16 +164,7 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
             return
         }
         
-        //猫和食物触碰后
-//        DLLog(message: "bodyA:\(contact.bodyA.categoryBitMask).bodyB:\(contact.bodyB.categoryBitMask)")
-        if (contact.bodyA.categoryBitMask == CatCategory && contact.bodyB.categoryBitMask == FoodCategory)
-            || (contact.bodyA.categoryBitMask == FoodCategory && contact.bodyB.categoryBitMask == CatCategory)
-        {
-            DLLog(message: "食物 触碰到猫")
-            foodNode.removeAllActions()
-            foodNode.removeFromParent()
-            foodNode.physicsBody = nil
-        }
+
         
         //检测到碰撞后销毁对象
         if contact.bodyA.categoryBitMask == WorldCategory {
