@@ -1,10 +1,6 @@
-http://www.jianshu.com/p/3fbdcf576650
+* [part 1](http://www.jianshu.com/p/3fbdcf576650)
+* [part 2](http://www.jianshu.com/p/7b29b750d5dc)
+* [part 3](https://github.com/xitu/gold-miner/blob/master/TODO/how-to-build-a-spritekit-game-in-swift-3-part-3.md)
 
-![RainCat Initial Code](documentation/header.png)
-#RainCat - Starting Point
-This is the initial code for RainCat, feel free to check it over, then head over to the lesson to get started.
-
-
-To follow along with the tutorial, check out the article on [Smashing Magazine](https://www.smashingmagazine.com/2016/11/how-to-build-a-spritekit-game-in-swift-3-part-1/).
-
-![divider](documentation/divider.png)
+* [买塞克拼图](https://www.raywenderlich.com/137216/whats-new-spritekit-ios-10-look-tile-maps)
+* http://mobile.51cto.com/iphone-514400.htm
