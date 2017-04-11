@@ -27,6 +27,8 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
     //🍜的边界值
     private let 🍜EdgeMargin : CGFloat = 75.0
     
+    private var foodNode : FoodSprite!
+    
     //scene精灵初始化
     override func sceneDidLoad() {
         self.lastUpdateTime = 0
@@ -103,6 +105,8 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
         
         self.lastUpdateTime = currentTime
         umbrellaNode.update(deltaTime: dt)
+        
+        catNode.update(deltaTime: dt, foodLocation: foodNode.position)
     }
     
     //复用雨滴事件
@@ -141,6 +145,23 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
         if contact.bodyA.categoryBitMask == CatCategory || contact.bodyB.categoryBitMask == CatCategory {
             handleCatCollision(contact: contact)
             return
+        }
+        
+        //如果触碰体是食物
+        if contact.bodyA.categoryBitMask == FoodCategory || contact.bodyB.categoryBitMask == FoodCategory {
+            handleFoodHit(contact: contact)
+            return
+        }
+        
+        //猫和食物触碰后
+//        DLLog(message: "bodyA:\(contact.bodyA.categoryBitMask).bodyB:\(contact.bodyB.categoryBitMask)")
+        if (contact.bodyA.categoryBitMask == CatCategory && contact.bodyB.categoryBitMask == FoodCategory)
+            || (contact.bodyA.categoryBitMask == FoodCategory && contact.bodyB.categoryBitMask == CatCategory)
+        {
+            DLLog(message: "食物 触碰到猫")
+            foodNode.removeAllActions()
+            foodNode.removeFromParent()
+            foodNode.physicsBody = nil
         }
         
         //检测到碰撞后销毁对象
@@ -216,13 +237,19 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
     }
     
     func spawnFood() {
-        let food = FoodSprite.newInstance()
+        if let currentFood = foodNode, children.contains(currentFood) {
+            foodNode.removeFromParent()
+            foodNode.removeAllActions()
+            foodNode.physicsBody = nil
+        }
+        foodNode = FoodSprite.newInstance()
+        
         var randomPosition : CGFloat = CGFloat(arc4random())
         
         randomPosition =  randomPosition.truncatingRemainder(dividingBy: size.width - 🍜EdgeMargin*2)
         randomPosition += 🍜EdgeMargin
         
-        food.position = CGPoint(x: randomPosition, y: size.height)
-        addChild(food)
+        foodNode.position = CGPoint(x: randomPosition, y: size.height)
+        addChild(foodNode)
     }
 }
