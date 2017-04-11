@@ -32,7 +32,7 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
         addChild(backgroundNode)
         
         lineNode.initLine(size: size)
-        addChild(lineNode)
+        //addChild(lineNode)
         
         
         //设置世界大小
@@ -52,6 +52,8 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
         umbrellaNode.updatePosition(point: CGPoint(x: frame.midX, y: frame.midY))
         umbrellaNode.zPosition = 4
         addChild(umbrellaNode)
+        
+        spawnCat()
         
     }
     
@@ -126,11 +128,17 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
         
         if contact.bodyA.categoryBitMask == RainDropCategory {
             contact.bodyA.node?.physicsBody?.collisionBitMask = 0
-            contact.bodyA.node?.physicsBody?.categoryBitMask = 0
+//            contact.bodyA.node?.physicsBody?.categoryBitMask = 0
         } else if contact.bodyB.categoryBitMask == RainDropCategory {
             
             contact.bodyB.node?.physicsBody?.collisionBitMask = 0
-            contact.bodyB.node?.physicsBody?.categoryBitMask = 0
+//            contact.bodyB.node?.physicsBody?.categoryBitMask = 0
+        }
+        
+        //如果触碰体是猫
+        if contact.bodyA.categoryBitMask == CatCategory || contact.bodyB.categoryBitMask == CatCategory {
+            handleCatCollision(contact: contact)
+            return
         }
         
         //检测到碰撞后销毁对象
@@ -148,6 +156,33 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
     
     //复用猫
     private func spawnCat() {
+        if let currentCat = catNode , children.contains(currentCat) {
+            catNode.removeFromParent()
+            catNode.removeAllActions()
+            catNode.physicsBody = nil
+        }
+        catNode = CatSprite.newInstance()
+        catNode.position = CGPoint(x: umbrellaNode.position.x, y: umbrellaNode.position.y - 30)
+        addChild(catNode)
+    }
+    
+    //检查是谁触碰了猫
+    func handleCatCollision(contact : SKPhysicsContact) {
+        var otherBody : SKPhysicsBody
+        if contact.bodyA.categoryBitMask == CatCategory {
+            otherBody = contact.bodyB
+        } else {
+            otherBody = contact.bodyA
+        }
+        
+        switch otherBody.categoryBitMask {
+        case WorldCategory:
+            spawnCat()
+        case RainDropCategory:
+            DLLog(message: "雨点碰到了猫")
+        default:
+            DLLog(message: "其他物体碰到了猫\(otherBody.categoryBitMask)")
+        }
         
     }
 }

@@ -43,7 +43,7 @@ public class UmbrellaSprite : SKSpriteNode {
     
     public func update(deltaTime: TimeInterval){
         //position 为当前雨伞位置
-        DLLog(message: "destination:\(destination.x).position:\(position.x)")
+//        DLLog(message: "destination:\(destination.x).position:\(position.x)")
         let distance = sqrt(pow((destination.x - position.x), 2) + pow((destination.y - position.y), 2))
         if(distance > 1) {
             let directionX = (destination.x - position.x)
