@@ -24,6 +24,8 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
     private let umbrellaNode = UmbrellaSprite.newInstance()
     //猫
     private var catNode : CatSprite!
+    //🍜的边界值
+    private let 🍜EdgeMargin : CGFloat = 75.0
     
     //scene精灵初始化
     override func sceneDidLoad() {
@@ -126,10 +128,10 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
     func didBegin(_ contact: SKPhysicsContact) {
 //        DLLog(message: "出发了碰撞方法：")
         
-        if contact.bodyA.categoryBitMask == RainDropCategory {
+        if contact.bodyA.categoryBitMask == RainDropCategory && contact.bodyB.categoryBitMask == FloorCategory {
             contact.bodyA.node?.physicsBody?.collisionBitMask = 0
 //            contact.bodyA.node?.physicsBody?.categoryBitMask = 0
-        } else if contact.bodyB.categoryBitMask == RainDropCategory {
+        } else if contact.bodyB.categoryBitMask == RainDropCategory && contact.bodyA.categoryBitMask == FloorCategory{
             
             contact.bodyB.node?.physicsBody?.collisionBitMask = 0
 //            contact.bodyB.node?.physicsBody?.categoryBitMask = 0

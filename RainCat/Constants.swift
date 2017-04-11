@@ -15,5 +15,6 @@ let RainDropCategory : UInt32 = 0x1 << 2
 let FloorCategory : UInt32 = 0x1 << 3
 // cat
 let CatCategory : UInt32 = 0x1 << 4
-
+// food
+let FoodCategory : UInt32 = 0x1 << 5
 
