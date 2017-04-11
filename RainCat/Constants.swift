@@ -13,6 +13,7 @@ let WorldCategory : UInt32 = 0x1 << 1
 let RainDropCategory : UInt32 = 0x1 << 2
 //地面
 let FloorCategory : UInt32 = 0x1 << 3
-
+// cat
+let CatCategory : UInt32 = 0x1 << 4
 
 

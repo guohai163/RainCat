@@ -13,16 +13,27 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
     private var lastUpdateTime : TimeInterval = 0
     private var currentRainDropSpawnTime : TimeInterval = 0
     private var rainDropSpawnRate : TimeInterval = 1
+    //背景
     private let backgroundNode = BackgroundNode()
+    //增加BUG
+    private let lineNode = LineNode()
+    
     //雨滴
     let raindropTexture = SKTexture(imageNamed: "rain_drop")
     //雨伞
     private let umbrellaNode = UmbrellaSprite.newInstance()
+    //猫
+    private var catNode : CatSprite!
     
+    //scene精灵初始化
     override func sceneDidLoad() {
         self.lastUpdateTime = 0
         backgroundNode.setup(size: size)
         addChild(backgroundNode)
+        
+        lineNode.initLine(size: size)
+        addChild(lineNode)
+        
         
         //设置世界大小
         var worldFrame = frame
@@ -37,21 +48,33 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
         
         self.physicsWorld.contactDelegate = self
         
-        umbrellaNode.position = CGPoint(x: frame.midX, y: frame.midY)
+        //umbrellaNode.position = CGPoint(x: frame.midX, y: frame.midY)
+        umbrellaNode.updatePosition(point: CGPoint(x: frame.midX, y: frame.midY))
         umbrellaNode.zPosition = 4
         addChild(umbrellaNode)
         
     }
     
-    
+    //屏幕按下事件
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        //获取按下时，触摸位置
+        let touchPoint = touches.first?.location(in: self)
         
-        
+        if let point = touchPoint {
+            umbrellaNode.setDestination(destination: point)
+        }
     }
     
+    //移动事件
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        let touchPoint = touches.first?.location(in: self)
         
+        if let point = touchPoint {
+            umbrellaNode.setDestination(destination: point)
+        }
     }
+    
+    
     
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
@@ -75,8 +98,10 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
         
         
         self.lastUpdateTime = currentTime
+        umbrellaNode.update(deltaTime: dt)
     }
     
+    //复用雨滴事件
     private func spawnRaindrop(){
         let raindrop = SKSpriteNode(texture: raindropTexture)
         //改变落雨点的位置为随机.arc4random 为随机函数，truncatingRemainder 为保证雨滴X坐标在屏幕内
@@ -97,7 +122,7 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
     
     //碰撞事件
     func didBegin(_ contact: SKPhysicsContact) {
-        DLLog(message: "出发了碰撞方法：")
+//        DLLog(message: "出发了碰撞方法：")
         
         if contact.bodyA.categoryBitMask == RainDropCategory {
             contact.bodyA.node?.physicsBody?.collisionBitMask = 0
@@ -119,5 +144,10 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
             contact.bodyA.node?.removeAllActions()
             
         }
+    }
+    
+    //复用猫
+    private func spawnCat() {
+        
     }
 }

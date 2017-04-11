@@ -38,5 +38,8 @@ public class BackgroundNode:SKNode{
         groundNode.zPosition = 1
         
         addChild(groundNode)
+        
+        
+        
     }
 }
