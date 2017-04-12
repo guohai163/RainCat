@@ -16,7 +16,7 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
     //背景
     private let backgroundNode = BackgroundNode()
     //增加BUG
-    private let lineNode = LineNode()
+    //private let lineNode = LineNode()
     
     //雨滴
     let raindropTexture = SKTexture(imageNamed: "rain_drop")
@@ -31,11 +31,12 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
     
     //scene精灵初始化
     override func sceneDidLoad() {
+        DLLog(message: "scene初始化")
         self.lastUpdateTime = 0
         backgroundNode.setup(size: size)
         addChild(backgroundNode)
         
-        lineNode.initLine(size: size)
+        //lineNode.initLine(size: size)
         //addChild(lineNode)
         
         
@@ -83,6 +84,7 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
     
     
     override func update(_ currentTime: TimeInterval) {
+        //DLLog(message: "进入GameSceneUpdate方法")
         // Called before each frame is rendered
         
         // Initialize _lastUpdateTime if it has not already been
@@ -141,6 +143,17 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
 //            contact.bodyB.node?.physicsBody?.categoryBitMask = 0
         }
         
+        //猫和食物触碰后
+        //        DLLog(message: "bodyA:\(contact.bodyA.categoryBitMask).bodyB:\(contact.bodyB.categoryBitMask)")
+        if (contact.bodyA.categoryBitMask == CatCategory && contact.bodyB.categoryBitMask == FoodCategory)
+            || (contact.bodyA.categoryBitMask == FoodCategory && contact.bodyB.categoryBitMask == CatCategory)
+        {
+            DLLog(message: "食物 触碰到猫")
+            foodNode.removeAllActions()
+            foodNode.removeFromParent()
+            foodNode.physicsBody = nil
+            spawnFood()
+        }
         //如果触碰体是猫
         if contact.bodyA.categoryBitMask == CatCategory || contact.bodyB.categoryBitMask == CatCategory {
             handleCatCollision(contact: contact)
@@ -153,16 +166,7 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
             return
         }
         
-        //猫和食物触碰后
-//        DLLog(message: "bodyA:\(contact.bodyA.categoryBitMask).bodyB:\(contact.bodyB.categoryBitMask)")
-        if (contact.bodyA.categoryBitMask == CatCategory && contact.bodyB.categoryBitMask == FoodCategory)
-            || (contact.bodyA.categoryBitMask == FoodCategory && contact.bodyB.categoryBitMask == CatCategory)
-        {
-            DLLog(message: "食物 触碰到猫")
-            foodNode.removeAllActions()
-            foodNode.removeFromParent()
-            foodNode.physicsBody = nil
-        }
+
         
         //检测到碰撞后销毁对象
         if contact.bodyA.categoryBitMask == WorldCategory {
@@ -202,7 +206,7 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
         case WorldCategory:
             spawnCat()
         case RainDropCategory:
-            DLLog(message: "雨点碰到了猫")
+            catNode.HitByRain()
         default:
             DLLog(message: "其他物体碰到了猫\(otherBody.categoryBitMask)")
         }

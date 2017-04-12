@@ -14,9 +14,10 @@ class GameViewController: UIViewController {
 
   override func viewDidLoad() {
     super.viewDidLoad()
-
+    DLLog(message: "项目启动到GameViewController")
     //a声明一个scene对象
     let sceneNode = GameScene(size: view.frame.size)
+    DLLog(message: "声明一个scene对象")
     //获取当前人VEIW
     if let view = self.view as! SKView? {
         //将新创见的scene添加到当前的view中
@@ -27,6 +28,7 @@ class GameViewController: UIViewController {
       view.showsFPS = true
       view.showsNodeCount = true
     }
+    DLLog(message: "GameViewController结束")
   }
 
   override var shouldAutorotate: Bool {
