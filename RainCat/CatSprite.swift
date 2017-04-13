@@ -37,8 +37,12 @@ public class CatSprite : SKSpriteNode {
     }
     
     public func update(deltaTime : TimeInterval, foodLocation: CGPoint) {
+        //当猫猫被重置后，计时功能
+        timeSinceLastHit += deltaTime
         
         if timeSinceLastHit >= maxFlailTime {
+            
+     
             //增加猫的动画
             if action(forKey: walkingActionKey) == nil{
                 let walkingAction = SKAction.repeatForever(
@@ -47,8 +51,15 @@ public class CatSprite : SKSpriteNode {
                 run(walkingAction, withKey: walkingActionKey)
             }
             
+            if zRotation != 0 && action(forKey: "action_rotate") == nil {
+                run(SKAction.rotate(toAngle: 0, duration: 0.25), withKey: "action_rotate")
+            }
             
-            if foodLocation.x < position.x {
+            if foodLocation.y > position.y && abs(foodLocation.x - position.x) < 2 {
+                physicsBody?.velocity.dx = 0
+                removeAction(forKey: walkingActionKey)
+                texture = walkFrames[1]
+            }else if foodLocation.x < position.x {
                 //Food is left
                 position.x -= movementSpeed * CGFloat(deltaTime)
                 xScale = -1
@@ -56,7 +67,9 @@ public class CatSprite : SKSpriteNode {
                 //Food is right
                 position.x += movementSpeed * CGFloat(deltaTime)
                 xScale = 1
-            }}
+            }
+            physicsBody?.angularVelocity = 0
+        }
     }
     
     //cat hit event
