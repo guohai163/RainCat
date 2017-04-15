@@ -29,8 +29,15 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
     
     private var foodNode : FoodSprite!
     
+    //HudPoint
+    private let hudNode = HudNode()
+    
     //scene精灵初始化
     override func sceneDidLoad() {
+
+        hudNode.setup(size: size)
+        addChild(hudNode)
+        
         DLLog(message: "scene初始化")
         self.lastUpdateTime = 0
         backgroundNode.setup(size: size)
@@ -149,6 +156,9 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
             || (contact.bodyA.categoryBitMask == FoodCategory && contact.bodyB.categoryBitMask == CatCategory)
         {
             DLLog(message: "食物 触碰到猫")
+            
+            hudNode.addPoint()
+            
             foodNode.removeAllActions()
             foodNode.removeFromParent()
             foodNode.physicsBody = nil
@@ -191,6 +201,8 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
         catNode = CatSprite.newInstance()
         catNode.position = CGPoint(x: umbrellaNode.position.x, y: umbrellaNode.position.y - 30)
         addChild(catNode)
+        //复位分数
+        hudNode.resetPoints()
     }
     
     //检查是谁触碰了猫
@@ -206,6 +218,7 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
         case WorldCategory:
             spawnCat()
         case RainDropCategory:
+            hudNode.resetPoints()
             catNode.HitByRain()
         default:
             DLLog(message: "其他物体碰到了猫\(otherBody.categoryBitMask)")
@@ -228,6 +241,7 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
         
         switch otherBody.categoryBitMask {
         case CatCategory:
+            hudNode.addPoint()
             DLLog(message: "fed cat")
             fallthrough
         case WorldCategory:

@@ -23,6 +23,21 @@ public class CatSprite : SKSpriteNode {
         SKTexture(imageNamed: "cat_two")
     ]
     
+    //猫咪叫声文件
+    private let meowSFX = [
+        "cat_meow_1.mp3",
+        "cat_meow_2.mp3",
+        "cat_meow_3.mp3",
+        "cat_meow_4.mp3",
+        "cat_meow_5.wav",
+        "cat_meow_6.wav",
+        "cat_meow_7.mp3"
+    ]
+    //当前被击中
+    private var currentRainHits = 4
+    //最大被击中数
+    private var maxRainHits = 4
+    
     //静态单例方法
     public static func newInstance() -> CatSprite {
         let cat = CatSprite(imageNamed: "cat_one")
@@ -74,8 +89,23 @@ public class CatSprite : SKSpriteNode {
     
     //cat hit event
     public func HitByRain(){
+
         timeSinceLastHit = 0
         //移除走路事件
         removeAction(forKey: walkingActionKey)
+        
+        if currentRainHits < maxRainHits {
+            currentRainHits += 1
+            return
+        }
+        
+        if action(forKey: "action_sound_effect") == nil {
+            currentRainHits = 0
+            //使用随机数，取出一个叫声文件
+            let selectSFX = Int(arc4random_uniform(UInt32(meowSFX.count)))
+            
+            run(SKAction.playSoundFileNamed(meowSFX[selectSFX], waitForCompletion: true), withKey: "action_sound_effect")
+            
+        }
     }
 }

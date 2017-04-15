@@ -16,7 +16,7 @@ public class FoodSprite : SKSpriteNode {
         //设定物理体尺寸
         foodSprite.physicsBody = SKPhysicsBody(rectangleOf: foodSprite.size)
         foodSprite.physicsBody?.categoryBitMask = FoodCategory
-        foodSprite.physicsBody?.contactTestBitMask = WorldCategory | RainDropCategory | CatCategory
+        foodSprite.physicsBody?.contactTestBitMask = WorldCategory | CatCategory
         foodSprite.zPosition = 5
         
         return foodSprite
