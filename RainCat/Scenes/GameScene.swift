@@ -35,6 +35,7 @@ class GameScene: SKScene,SKPhysicsContactDelegate {
     //scene精灵初始化
     override func sceneDidLoad() {
 
+        //初始化计分牌
         hudNode.setup(size: size)
         addChild(hudNode)
         

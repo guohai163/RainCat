@@ -18,3 +18,5 @@ let CatCategory : UInt32 = 0x1 << 4
 // food
 let FoodCategory : UInt32 = 0x1 << 5
 
+let ScoreKey = "RAINCAT_HIGHSCORE"
+

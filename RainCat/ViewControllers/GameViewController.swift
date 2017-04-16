@@ -16,7 +16,7 @@ class GameViewController: UIViewController {
     super.viewDidLoad()
     DLLog(message: "项目启动到GameViewController")
     //a声明一个scene对象
-    let sceneNode = GameScene(size: view.frame.size)
+    let sceneNode = MenuScene(size: view.frame.size)
     
     SoundManager.sharedInstance.startPlaying()
     DLLog(message: "声明一个scene对象")
